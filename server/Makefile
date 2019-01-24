@@ -6,11 +6,15 @@ DB_NAME=dev-push-server
 DB_USER=dev-push-server
 
 # run server
+#
+# Arguments
+#
+#	ARGS    Additional argument to pass to server
 run:
 	PUSH_SERVER_HTTP_PORT="${PUSH_SERVER_HTTP_PORT}" \
 	PUSH_SERVER_DB_NAME="${DB_NAME}" \
 	PUSH_SERVER_DB_USER="${DB_USER}" \
-	go run main.go
+	go run main.go ${ARGS}
 
 # db runs a local Postgres server with Docker
 db:
