@@ -12,6 +12,9 @@ import (
 	"github.com/Noah-Huppert/push/server/config"
 
 	"github.com/Noah-Huppert/golog"
+	"github.com/golang-migrate/migrate/v4"
+	migratePsql "github.com/golang-migrate/migrate/v4/database/postgres"
+	_ "github.com/golang-migrate/migrate/v4/source/file"
 	"github.com/gorilla/mux"
 	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq"
@@ -67,14 +70,35 @@ func main() {
 	// {{{2 Run migrations if requested
 	var runMigrations bool
 
-	flag.BoolVar(&runMigrations, "migrate", false, "Indicates program "+
+	flag.BoolVar(&runMigrations, "-migrate", false, "Indicates program "+
 		"should run DB migrations and exit (Without starting API "+
 		"server)")
 
 	flag.Parse()
 
 	if runMigrations {
-		logger.Info("will run migrations")
+		logger.Info("running db migrations")
+
+		// {{{3 Setup migration Postgres driver
+		psqlDriver, err := migratePsql.WithInstance(stdDb,
+			&migratePsql.Config{})
+		if err != nil {
+			logger.Fatalf("error creating migrations Postgres "+
+				"driver: %s", err.Error())
+		}
+
+		// {{{3 Setup migrate client
+		migrateClient, err := migrate.NewWithDatabaseInstance(
+			"file://./migrations", "postgres", psqlDriver)
+
+		// {{{3 Run migrations
+		if err = migrateClient.Up(); err != nil {
+			logger.Fatalf("error running db migrations: %s",
+				err.Error())
+		}
+
+		logger.Info("ran db migrations successfully, exiting...")
+
 		os.Exit(0)
 	}
 
