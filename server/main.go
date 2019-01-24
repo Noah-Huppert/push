@@ -2,6 +2,8 @@ package main
 
 import (
 	"context"
+	"database/sql"
+	"flag"
 	"fmt"
 	"net/http"
 	"os"
@@ -46,11 +48,13 @@ func main() {
 
 	// {{{1 Connect to DB
 	// {{{2 Connect
-	db, err := sqlx.Connect("postgres", fmt.Sprintf("dbname=%s user=%s "+
+	stdDb, err := sql.Open("postgres", fmt.Sprintf("dbname=%s user=%s "+
 		"sslmode=disable", cfg.DBName, cfg.DBUser))
 	if err != nil {
 		logger.Fatalf("error connecting to database: %s", err.Error())
 	}
+
+	db := sqlx.NewDb(stdDb, "postgres")
 
 	// {{{2 Test connection
 	if err = db.Ping(); err != nil {
@@ -59,6 +63,20 @@ func main() {
 	}
 
 	logger.Info("connected to database")
+
+	// {{{2 Run migrations if requested
+	var runMigrations bool
+
+	flag.BoolVar(&runMigrations, "migrate", false, "Indicates program "+
+		"should run DB migrations and exit (Without starting API "+
+		"server)")
+
+	flag.Parse()
+
+	if runMigrations {
+		logger.Info("will run migrations")
+		os.Exit(0)
+	}
 
 	// {{{1 Setup HTTP server
 	numDoneItems++
