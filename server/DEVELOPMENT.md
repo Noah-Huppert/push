@@ -4,7 +4,6 @@ Development instructions.
 # Table Of Contents
 - [Overview](#overview)
 - [Dependencies](#dependencies)
-- [Configuration](#configuration)
 - [Local Database](#local-database)
 - [Run](#run)
 
@@ -24,16 +23,6 @@ new dependency:
 dep ensure
 ```
 
-# Configuration
-Set configuration environment variables:
-
-- `PUSH_SERVER_HTTP_PORT`
-- `PUSH_SERVER_DB_NAME`
-- `PUSH_SERVER_DB_USER`
-
-See the [`config/config.go`](./config/config.go) file for documentation on 
-these values.
-
 #Local Database
 To start a local database Docker is required.
 
@@ -44,8 +33,7 @@ make db
 ```
 
 # Run
-Complete steps in [Configuration](#configuration) and 
-[Local Database](#local-database).
+Complete steps in the [Local Database](#local-database) section.
 
 Then run:
 
