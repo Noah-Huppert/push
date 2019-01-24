@@ -20,6 +20,6 @@ db:
 		--rm \
 		--net host \
 		-e POSTGRES_DB="${DB_NAME}" \
-		-e POSTGRES_USER="${DB_USER} \
+		-e POSTGRES_USER="${DB_USER}" \
 		-v "${PWD}/${DB_DIR}:/var/lib/postgresql/data" \
 		postgres:alpine
