@@ -11,6 +11,8 @@ import (
 
 	"github.com/Noah-Huppert/golog"
 	"github.com/gorilla/mux"
+	"github.com/jmoiron/sqlx"
+	_ "github.com/lib/pq"
 )
 
 func main() {
@@ -41,6 +43,22 @@ func main() {
 
 	// doneChan receives any value when a part of the program is done
 	doneChan := make(chan int)
+
+	// {{{1 Connect to DB
+	// {{{2 Connect
+	db, err := sqlx.Connect("postgres", fmt.Sprintf("dbname=%s user=%s "+
+		"sslmode=disable", cfg.DBName, cfg.DBUser))
+	if err != nil {
+		logger.Fatalf("error connecting to database: %s", err.Error())
+	}
+
+	// {{{2 Test connection
+	if err = db.Ping(); err != nil {
+		logger.Fatalf("error testing database connection: %s",
+			err.Error())
+	}
+
+	logger.Info("connected to database")
 
 	// {{{1 Setup HTTP server
 	numDoneItems++
