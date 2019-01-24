@@ -12,5 +12,5 @@ type APIToken struct {
 	DeviceID int64 `json:"device_id"`
 
 	// TokenHash is the bcrypt hash of the token
-	TokenHash string `json:"token_hash"`
+	TokenHash string `json:"-"`
 }
