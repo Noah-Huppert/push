@@ -10,6 +10,12 @@ import (
 type Config struct {
 	// HTTPPort is the port the API will serve HTTP requests on
 	HTTPPort int `envconfig:"http_port"`
+
+	// DBName is the database name
+	DBName string `envconfig:"db_name"`
+
+	// DBUser is the database user
+	DBUser string `envconfig:"db_user"`
 }
 
 // NewConfigFromEnv load configuration options from environment variables
