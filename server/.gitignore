@@ -1,2 +1,5 @@
 # Go dependencies
 vendor/
+
+# Local Postgres data directory
+container-data/
