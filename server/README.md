@@ -7,4 +7,5 @@ Broker for devices to communicate.
 # Overview
 Go API server.
 
-[Design document](DESIGN.md)
+[Design document](DESIGN.md)  
+[Development instructions](DEVELOPMENT.md)
