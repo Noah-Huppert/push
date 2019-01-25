@@ -70,7 +70,7 @@ func main() {
 	// {{{2 Run migrations if requested
 	var runMigrations bool
 
-	flag.BoolVar(&runMigrations, "-migrate", false, "Indicates program "+
+	flag.BoolVar(&runMigrations, "migrate", false, "Indicates program "+
 		"should run DB migrations and exit (Without starting API "+
 		"server)")
 
@@ -90,6 +90,11 @@ func main() {
 		// {{{3 Setup migrate client
 		migrateClient, err := migrate.NewWithDatabaseInstance(
 			"file://./migrations", "postgres", psqlDriver)
+
+		if err != nil {
+			logger.Fatalf("error creating migration client: %s",
+				err.Error())
+		}
 
 		// {{{3 Run migrations
 		if err = migrateClient.Up(); err != nil {
