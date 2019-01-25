@@ -11,7 +11,7 @@ DB_USER=dev-push-server
 #
 #	ARGS    Additional argument to pass to server
 run:
-	PUSH_SERVER_HTTP_PORT="${PUSH_SERVER_HTTP_PORT}" \
+	PUSH_SERVER_HTTP_PORT="${HTTP_PORT}" \
 	PUSH_SERVER_DB_NAME="${DB_NAME}" \
 	PUSH_SERVER_DB_USER="${DB_USER}" \
 	go run main.go ${ARGS}
