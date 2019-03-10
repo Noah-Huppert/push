@@ -11,6 +11,6 @@ type Push struct {
 	// FromDeviceID is the ID of the device who sent the push
 	FromDeviceID int64 `json:"from_device_id"`
 
-	// Text is the media sent in the push
-	Text string `json:"text"`
+	// Data is the media sent in the push
+	Data string `json:"data"`
 }
