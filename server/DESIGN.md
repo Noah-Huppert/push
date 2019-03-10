@@ -3,6 +3,15 @@ Server design.
 
 # Table Of Contents
 - [Models](#models)
+	- [User Model](#user-model)
+    - [Device Model](#device-model)
+	- [API Token Model](#api-token-model)
+	- [Push Model](#push-model)
+- [gRPC Interface](#grpc-interface)
+	- [Users Service](#users-service)
+	- [Devices Service](#devices-service)
+	- [Authentication Service](#authentication-service)
+	- [Push Service](#push-service)
 - [Endpoints](#endpoints)
 
 # Models
@@ -32,71 +41,46 @@ All `*id` fields are of type `SERIAL`
 - `id`
 - `user_id`
 - `from_device_id`
-- `text` (`text`)
+- `data` (`text`)
 
-# Endpoints
-API endpoints.  
+# gRPC Interface
+gRPC services.  
 
-All data should be JSON encoded.  
+Methods require call credentials with an API token provided in the 
+`authorization` field unless noted otherwise.
 
-Unless specified an API Token should be provided in the 
-`Authorization` header.
+## Users Service
+### GetSelf
+Returns information about authenticated user.
 
-## User Endpoints
-### Create User
-#### Request
-POST `/api/v0/users`
+## Devices Service
+### CreateDevice
+Create a new device for user.
 
-Authentication not required.
+### GetDevices
+Get all of user's devices.
 
-Body:
+### SetDevice
+Edit properties of a device.
 
-- `username` (`string`)
-- `password` (`string`)
+### DeleteDevice
+Delete device.
 
-#### Response
-Body:
+## Authentication Service
+### GetTokens
+Get details about all of user's API tokens.
 
-- `user` ([`User`](#user-model))
+### CreateToken
+Exchange user's password for API token.  
 
-## Device Endpoints
-### Create Device
-#### Request
-POST `/api/v0/devices`
+Call credentials are not required for this method.
 
-Body:
+### DeleteToken
+Delete an API token.
 
-- `platform` (`string`)
-    - Must be one of the allowed [Device model's](#device-model) `platform` 
-	enum values
-- `name` (`string`)
+## Push Service
+### GetPushes
+Get user's pushes. Paginated.
 
-#### Response
-Body:
-
-- `device` ([`device`](#device-model))
-- `api_token` (`string`)
-
-### Get Devices
-#### Request
-GET `/api/v0/devices`
-
-Retrieves all a user's devices.
-
-#### Response
-
-- `devices` ([`device`](#device-model)[])
-
-## Push Endpoints
-### Create Push
-#### Request
-POST `/api/v0/push`
-
-Body:
-
-- `text` (`string`)
-
-#### Response
-Body:
-
-- `push` ([`push`](#push-model))
+### CreatePush
+Create push.
